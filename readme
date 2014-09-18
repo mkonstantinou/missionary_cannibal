@@ -1,0 +1,12 @@
+Matthew Konstantinou
+9/18/2014
+Homework 1
+
+Assumptions:
+    1. Missionaries and cannibals are not "left alone" until the boat leaves the shore that they are on.
+       For example, if there are 3 cannibals and two missionaries on the right side of the river and the boat 
+       has not taken any passengers back to the left side, the solution does not fail.  It only fails when 
+       the boat leaves the right shore  with the missionaries outnumbered.
+
+To run:
+    ./missionary_cannibal

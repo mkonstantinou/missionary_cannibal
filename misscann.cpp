@@ -138,21 +138,26 @@ bool Node::checkAction(int act[], Node* orig, vector<Node*>* frontier)
     int newMiss = this->numMiss + (this->boatPos * act[0]);
     int newCann = this->numCann + (this->boatPos * act[1]);
    
+    int rightMiss = MISS_CANN_COUNTS - newMiss;
+    int rightCann = MISS_CANN_COUNTS - newCann;
+
     //Don't send 1 person across if the boat is on the left (start) side
     if (this->boatPos == -1 && ( act==actions[0] || act==actions[1] ))
         return false;
     
-    int rightNewMiss = orig->numMiss - newMiss;
-    int rightNewCann = orig->numCann - newCann;
-
-    //if missionaries +- new > cannibals +- new
+    //if missionaries +- new or cannibals +- new are out of bounds
     if ((newMiss > MISS_CANN_COUNTS) || (newMiss < 0) || (newCann > MISS_CANN_COUNTS) || (newCann < 0))
         return false;
 
-    //if (newMiss >= newCann && rightNewMiss >= rightNewCann)
-    if ((newMiss >= newCann) || (newMiss == 0) && checkHistory(newMiss, newCann, frontier))
-        return true;
+    //If the right cannibals outnumber the right missionaries and right missionaries != 0
+    if (this->boatPos == 1 && rightMiss < rightCann && rightMiss != 0)
+        return false;
     
+    //if (newMiss >= newCann && rightNewMiss >= rightNewCann)
+    if ((newMiss >= newCann) || ((newMiss == 0) && checkHistory(newMiss, newCann, frontier)))
+        return true;
+
+
     return false;
 }
 
@@ -211,7 +216,7 @@ int main()
 
         cout << "Cannibals:    " << result->numCann << " |\t  | " << MISS_CANN_COUNTS - result->numCann << endl;
 
-        cout << "-----------------" << endl;
+        cout << "-----------------------------" << endl;
         
         solution->pop_back();
         //solution->erase(solution->begin());
